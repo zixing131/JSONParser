@@ -61,6 +61,8 @@ class JsonReader:
                 return Token(Token.KEY, self.getString())
             if char == '{':
                 return Token(Token.OBJECT, char)
+            if char == '}':
+                return Token(Token.OBJECT_END, char)
             else:
                 raise Exception('Invalid Char: %s' % char)
         elif expect == Token.COLON:
@@ -70,13 +72,13 @@ class JsonReader:
                 raise Exception('Invalid Char: %s' % char)
         elif expect == Token.VALUE:
             if char == '"':
-                return Token(Token.STRING, self.getString())
+                return Token(Token.VALUE, self.getString())
             elif char.isdigit() or char == '-' or char == '+':
-                return Token(Token.NUMBER, self.getNumber(char))
+                return Token(Token.VALUE, self.getNumber(char))
             elif char == 'f' or char == 't':
-                return Token(Token.BOOLEAN, self.getBoolean(char))
+                return Token(Token.VALUE, self.getBoolean(char))
             elif char == 'n':
-                return Token(Token.NULL, self.getNull(char))
+                return Token(Token.VALUE, self.getNull(char))
             elif char == '{':
                 return Token(Token.OBJECT, char)
             elif char == '[':
